@@ -1,0 +1,10 @@
+{
+	"id": "epub-viewer",
+	"name": "Epub Viewer",
+	"version": "0.2.0",
+	"minAppVersion": "1.7.2",
+	"description": "A clean, focused EPUB reader for Obsidian. Open EPUB, MOBI, AZW3, FB2, CBZ and TXT; enjoy paginated or continuous scrolling, adjustable font size, reading themes, table of contents, full-text search, a bookshelf with progress, and reading-time tracking — without leaving your vault.",
+	"author": "hellokunzai",
+	"authorUrl": "https://github.com/hellokunzai/obsidian-book-note",
+	"isDesktopOnly": false
+}
