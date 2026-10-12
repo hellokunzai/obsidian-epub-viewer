@@ -1,0 +1,78 @@
+name: Release Obsidian Plugin
+
+# 两条发布路径并存：
+#   1) 推送 tag（如 `0.2.0`，**不加 v 前缀**）→ 自动发版
+#   2) 在 Actions 页面手动 Run，填写 version 输入 → 自动补 tag 并发版
+# 注意：绝不加 --draft，否则 Release 会变草稿、社区商店查无此版。
+
+on:
+  push:
+    tags:
+      - "*"
+  workflow_dispatch:
+    inputs:
+      version:
+        description: "要发布的版本号，须与 manifest.json 一致（不带 v 前缀）"
+        required: true
+        type: string
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0          # --generate-notes 需要完整历史
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+
+      - name: Resolve version
+        id: version
+        env:
+          DISPATCH_VERSION: ${{ inputs.version }}
+        run: |
+          if [ "${GITHUB_EVENT_NAME}" = "workflow_dispatch" ]; then
+            VERSION="${DISPATCH_VERSION}"
+          else
+            VERSION="${GITHUB_REF_NAME}"
+          fi
+          VERSION="${VERSION#v}"     # 容错：手滑带了 v 前缀也剥掉
+          echo "version=${VERSION}" >> "$GITHUB_OUTPUT"
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build
+        run: npm run build
+
+      - name: Check version consistency
+        run: node .github/scripts/check-version.mjs --tag "${{ steps.version.outputs.version }}"
+
+      - name: Create tag
+        if: github.event_name == 'workflow_dispatch'
+        env:
+          VERSION: ${{ steps.version.outputs.version }}
+        run: |
+          if [ "$(git tag -l "${VERSION}")" = "${VERSION}" ]; then
+            echo "tag 已存在，跳过"
+          else
+            git config user.name "github-actions[bot]"
+            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+            git tag "${VERSION}" && git push origin "${VERSION}"
+          fi
+
+      - name: Create GitHub Release
+        env:
+          GH_TOKEN: ${{ github.token }}
+          VERSION: ${{ steps.version.outputs.version }}
+        run: |
+          gh release create "${VERSION}" main.js manifest.json styles.css \
+            --title "${VERSION}" --generate-notes

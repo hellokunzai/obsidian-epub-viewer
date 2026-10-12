@@ -62,8 +62,8 @@ export class EpubViewerSettingsTab extends PluginSettingTab {
       .setName(t("settings.epub.flow.name"))
       .setDesc(t("settings.epub.flow.desc"))
       .addDropdown((dropdown) => {
-        dropdown.addOption("paginated", "翻页");
-        dropdown.addOption("scrolled", "滚动");
+        dropdown.addOption("paginated", t("settings.epub.flow.paginated"));
+        dropdown.addOption("scrolled", t("settings.epub.flow.scrolled"));
         dropdown.setValue(this.plugin.settings.epubDefaultFlow).onChange(async (value) => {
           this.plugin.settings.epubDefaultFlow = value as EpubFlowMode;
           await this.plugin.saveSettings();

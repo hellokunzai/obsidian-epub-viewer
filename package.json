@@ -3,7 +3,7 @@
 	"version": "0.2.0",
 	"author": "hellokunzai",
 	"private": true,
-	"description": "Non-invasive Obsidian annotations for EPUB with a unified sidebar, semantic tags, deep links, and sidecar storage.",
+	"description": "A clean, focused e-book reader for Obsidian. Open EPUB, MOBI, AZW3, FB2, CBZ and TXT inside your vault; enjoy paginated or continuous scrolling, adjustable font size, reading themes, table of contents, full-text search, a progress bookshelf and reading-time tracking.",
 	"main": "main.js",
 	"scripts": {
 		"build": "node esbuild.config.mjs production",

@@ -2280,7 +2280,7 @@ export class EpubReaderView extends FileView {
 				const index = this.resolveFoliateHrefIndex(item.href);
 				if (index !== null) {
 					result.push({
-						entry: { label: (item.label ?? "").trim() || `章节 ${index + 1}`, spineIndex: index, level },
+						entry: { label: (item.label ?? "").trim() || t("common.chapterLabel", { index: index + 1 }), spineIndex: index, level },
 						children,
 					});
 				} else if (children.length > 0) {

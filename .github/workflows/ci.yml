@@ -1,0 +1,41 @@
+name: CI
+
+# 每次改动都验证「能编译 + 三个产物都在」。
+# main.js 被 .gitignore 忽略，必须由 CI 现场构建，所以最后的产物断言不能省。
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+      - run: npm ci
+      - name: Type check
+        run: npm run typecheck
+      - name: Build plugin
+        run: npm run build
+      - name: Verify build output
+        run: |
+          for f in main.js manifest.json styles.css; do
+            if [ ! -f "$f" ]; then
+              echo "::error::缺少构建产物 $f"
+              exit 1
+            fi
+          done
+          ls -lh main.js manifest.json styles.css

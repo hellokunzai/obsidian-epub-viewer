@@ -21,6 +21,7 @@ const en: Dict = {
   // Common
   "common.more": "More",
   "common.unknownChapter": "Unknown chapter",
+  "common.chapterLabel": "Chapter {{index}}",
 
   // Settings
   "settings.epub.heading": "EPUB reading",
@@ -30,6 +31,8 @@ const en: Dict = {
   "settings.epub.theme.desc": "Background and text colors of the EPUB reading area.",
   "settings.epub.flow.name": "Page mode",
   "settings.epub.flow.desc": "Paginated shows one page; scrolled is continuous.",
+  "settings.epub.flow.paginated": "Paginated",
+  "settings.epub.flow.scrolled": "Continuous scroll",
 
   // Bookshelf
   "bookshelf.title": "EPUB Library",
@@ -90,6 +93,7 @@ const zh: Dict = {
   // Common
   "common.more": "更多",
   "common.unknownChapter": "未知章节",
+  "common.chapterLabel": "章节 {{index}}",
 
   // Settings
   "settings.epub.heading": "EPUB 阅读",
@@ -99,6 +103,8 @@ const zh: Dict = {
   "settings.epub.theme.desc": "EPUB 阅读区背景与文字配色。",
   "settings.epub.flow.name": "翻页模式",
   "settings.epub.flow.desc": "翻页为分页布局；滚动为连续滚动阅读。",
+  "settings.epub.flow.paginated": "翻页",
+  "settings.epub.flow.scrolled": "连续滚动",
 
   // Bookshelf
   "bookshelf.title": "📚 电子书书架",
