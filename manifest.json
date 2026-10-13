@@ -1,7 +1,7 @@
 {
 	"id": "epub-viewer",
 	"name": "Epub Viewer",
-	"version": "0.2.0",
+	"version": "0.2.1",
 	"minAppVersion": "1.7.2",
 	"description": "Open EPUB, MOBI, AZW3, FB2, CBZ and TXT in a clean reader, paginated or continuous scrolling, adjustable font size, reading themes, table of contents, full-text search, a progress bookshelf and reading-time tracking.",
 	"author": "hellokunzai",

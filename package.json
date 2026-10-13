@@ -1,6 +1,6 @@
 {
 	"name": "epub-viewer",
-	"version": "0.2.0",
+	"version": "0.2.1",
 	"author": "hellokunzai",
 	"private": true,
 	"description": "A clean, focused e-book reader for Obsidian. Open EPUB, MOBI, AZW3, FB2, CBZ and TXT inside your vault; enjoy paginated or continuous scrolling, adjustable font size, reading themes, table of contents, full-text search, a progress bookshelf and reading-time tracking.",
