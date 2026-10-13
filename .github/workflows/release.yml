@@ -69,13 +69,26 @@ jobs:
             git tag "${VERSION}" && git push origin "${VERSION}"
           fi
 
+      - name: Fetch tag annotation
+        env:
+          VERSION: ${{ steps.version.outputs.version }}
+        run: git fetch --force origin "refs/tags/${VERSION}:refs/tags/${VERSION}"
+
       - name: Create GitHub Release
         env:
           GH_TOKEN: ${{ github.token }}
           VERSION: ${{ steps.version.outputs.version }}
         run: |
           # 优先用 tag 的注解（用户填写的发布描述），否则自动生成
+          # actions/checkout 默认不拉取 tag 注解对象，上面已显式 fetch，这里再兜底一次
           NOTES="$(git tag -l --format='%(contents)' "${VERSION}" 2>/dev/null || true)"
+          if [ -z "${NOTES}" ]; then
+            NOTES="$(git for-each-ref "refs/tags/${VERSION}" --format='%(contents)' 2>/dev/null || true)"
+          fi
+          # 幂等：已存在同名 Release 先删后建，便于重推 tag 更新发布说明
+          if gh release view "${VERSION}" >/dev/null 2>&1; then
+            gh release delete "${VERSION}" -y
+          fi
           if [ -n "${NOTES}" ]; then
             printf '%s\n' "${NOTES}" > /tmp/release-notes.md
             gh release create "${VERSION}" main.js manifest.json styles.css \
