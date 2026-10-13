@@ -720,7 +720,6 @@ export class EpubReaderView extends FileView {
 			cls: "epub-viewer-epub-theme-menu",
 			attr: { role: "menu" },
 		});
-		menu.style.display = "none";
 
 		for (const theme of EPUB_READING_THEMES) {
 			const item = menu.createEl("button", {
@@ -749,7 +748,7 @@ export class EpubReaderView extends FileView {
 
 		trigger.addEventListener("click", (e: MouseEvent) => {
 			e.stopPropagation();
-			if (menu.style.display === "none") {
+			if (!menu.hasClass("is-open")) {
 				this.openThemeDropdown(menu, trigger);
 			} else {
 				this.closeThemeDropdown();
@@ -775,18 +774,18 @@ export class EpubReaderView extends FileView {
 	 */
 	private openThemeDropdown(menu: HTMLElement, trigger: HTMLElement): void {
 		const doc = trigger.ownerDocument;
-		menu.style.display = "block";
 		trigger.setAttribute("aria-expanded", "true");
 
 		// 探针法定位：position: fixed 的包含块通常是视口，但祖先带 contain/transform
 		// （如 .workspace-leaf 的 contain: strict）时包含块会变成那个祖先，
 		// 直接用 getBoundingClientRect() 的视口坐标写 left/top 会整体错位。
-		// 先把菜单放到 (0,0) 读一次 rect —— 该 rect 原点即「真实包含块原点」的视口坐标，
+		// 先把菜单以 is-open(显示) + is-probing(固定定位到 0,0 且不可见) 状态渲染，
+		// 读一次 rect —— 该 rect 原点即「真实包含块原点」的视口坐标，
 		// 用「期望视口坐标 − 探针原点」换算，两种包含块情形下都成立。
-		menu.style.position = "fixed";
-		menu.style.left = "0px";
-		menu.style.top = "0px";
+		menu.addClass("is-open");
+		menu.addClass("is-probing");
 		const probe = menu.getBoundingClientRect();
+		menu.removeClass("is-probing");
 
 		const rect = trigger.getBoundingClientRect();
 		const menuWidth = menu.offsetWidth;
@@ -832,7 +831,7 @@ export class EpubReaderView extends FileView {
 	 */
 	private closeThemeDropdown(): void {
 		if (this.themeMenuEl) {
-			this.themeMenuEl.style.display = "none";
+			this.themeMenuEl.removeClass("is-open");
 		}
 		if (this.themeTriggerEl) {
 			this.themeTriggerEl.setAttribute("aria-expanded", "false");

@@ -1203,8 +1203,10 @@ body.is-mobile.epub-viewer-mobile-hide-nav .mobile-toolbar {
   flex-shrink: 0;
 }
 
-/* 下拉菜单 */
+/* 下拉菜单：默认隐藏，打开时切换 .is-open；
+   .is-probing 用于定位探针（固定定位到 0,0 且不可见），避免直接写内联 style 触发校验 */
 .epub-viewer-epub-theme-menu {
+  display: none;
   position: absolute;
   top: calc(100% + 4px);
   left: 0;
@@ -1215,6 +1217,18 @@ body.is-mobile.epub-viewer-mobile-hide-nav .mobile-toolbar {
   box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
   padding: 4px;
   z-index: 1000;
+}
+
+.epub-viewer-epub-theme-menu.is-open {
+  display: block;
+  position: fixed;
+}
+
+.epub-viewer-epub-theme-menu.is-probing {
+  visibility: hidden;
+  position: fixed;
+  left: 0;
+  top: 0;
 }
 
 .epub-viewer-epub-theme-item {
